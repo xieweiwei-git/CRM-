@@ -1,0 +1,46 @@
+{% for k,v in menu_dict.items %}
+    <li class="nav-item menu-open">
+
+        <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+                {{ v.permissions__menus__title }}
+                <i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            {% for url_list in v.children %}
+                <li class="nav-item">
+                    <a href="{{ url_list.permissions__url }}"
+                       class="nav-link customer">{{ url_list.permissions__title }}</a>
+                </li>
+            {% endfor %}
+            {#                            <li class="nav-item">#}
+            {#                                <a href="" class="nav-link customer">菜单1</a>#}
+            {#                            </li>#}
+            {#                            <li class="nav-item">#}
+            {#                                <a href="" class="nav-link customer">菜单2</a>#}
+            {#                            </li>#}
+        </ul>
+
+    </li>
+{% endfor %}
+
+{#<div>#}
+{#    {% for k,v in menu_dict.items %}#}
+{#        <div class="item">{{ v.permissions__menus__title }}</div>#}
+{#    {% endfor %}#}
+{#</div>#}
+
+
+{##}
+{#{% for list in permissions %}#}
+{#    {% if list.permissions__is_menu %}#}
+{#        <li class="nav-item">#}
+{#            <a href="{{ list.permissions__url }}" class="nav-link customer {{ list.class }}">#}
+{#                <i class="far fa-circle nav-icon"></i>#}
+{#                <p>{{ list.permissions__title }}</p>#}
+{#            </a>#}
+{#        </li>#}
+{#    {% endif %}#}
+{#{% endfor %}#}

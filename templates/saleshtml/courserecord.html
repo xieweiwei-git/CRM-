@@ -1,0 +1,87 @@
+{% extends 'starter.html' %}
+{% load mytags %}
+{% load static %}
+
+{% block title %}
+    <h1>课程记录</h1>
+{% endblock %}
+{% block consult %}
+    <div style="padding-bottom: 4px"><a href="{% url 'add_courserecord' %}" class=" btn btn-primary">添加纪录</a></div>
+    <form class="form-inline" style="float: right !important;">
+        {#    {% csrf_token %}#}
+        <div class="form-group">
+            <select class="form-control" name="search_type">
+                <option value="course_title__contains">课程名称</option>
+                {#                <option value="qq__contains">QQ</option>#}
+            </select>
+            <input type="text" class="form-control" id="search" placeholder="seach..." name="name">
+            <button type="submit" class="btn btn-default">search</button>
+        </div>
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group" style="float: left !important;">
+            <select name="action" id="action" class="form-control">
+                <option value="bulk_create_record">添加学习记录</option>
+                <option value="deleteRecord">批量删除</option>
+            </select>
+
+
+        </div>
+        <button class="btn btn-primary">GO!</button>
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+            <tr>
+                <th><input type="checkbox">all</th>
+                <th>序号</th>
+                <th>节次</th>
+                <th>课程标题</th>
+                <th>课程内容</th>
+                <th>上课时间</th>
+                <th>作业</th>
+                <th>作业标题</th>
+                <th>学习记录</th>
+                <th>得分点</th>
+                <th>班级</th>
+                <th>讲师</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <!--
+            day_num = models.IntegerField('节次',help_text='填写几节课，或者是几天的课程')
+            date = models.DateTimeField(auto_now_add=True,verbose_name='上课时间')
+            course_title = models.CharField('课程标题',max_length=64,null=True,blank=True)
+            course_memo = models.TextField('课程内容',max_length=300,null=True,blank=True)
+            has_homework = models.BooleanField('c',default=True)
+            homework_title = models.CharField('作业标题',max_length=64,blank=True,null=True)
+            homework_memo = models.TextField('作业描述',max_length=500,blank=True,null=True)
+            scoring_point = models.TextField('得分点',max_length=300,blank=True,null=True)
+            re_class = models.ForeignKey(to='Classlist',verbose_name='班级')
+            teacher = models.ForeignKey('UserInfo',verbose_name='讲师')
+            -->
+            {% for courseRecord in courseRecords %}
+                <tr>
+                    <td><input type="checkbox" name="cids" value="{{ courseRecord.pk }}"></td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ courseRecord.day_num }}</td>
+                    <td>{{ courseRecord.course_title }}</td>
+                    <td>{{ courseRecord.course_memo }}</td>
+                    <td>{{ courseRecord.date | date:'Y:m:d H:i:s' }}</td>
+                    <td>{{ courseRecord.has_homework }}</td>
+                    <td>{{ courseRecord.homework_title }}</td>
+                    <td><a href="{% url 'studyrecord' courseRecord.pk%}">查看学习记录</a></td>
+                    <td>{{ courseRecord.scoring_point }}</td>
+                    <td>{{ courseRecord.re_class }}</td>
+                     <td>{{ courseRecord.teacher }}</td>
+                    {#                    <td><a class="fa fa-edit" href="{% url 'edit_customer' costomers.pk %}">编辑</a></td>#}
+                    <td><a class="fa fa-edit" href="{% resole_url request 'add_edit_courserecord' courseRecord.pk %}">编辑</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+    {{ page_html }}
+{% endblock %}

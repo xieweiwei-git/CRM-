@@ -1,0 +1,29 @@
+{% extends 'templates/starter.html' %}
+
+{% block title %}
+    <div class="col-sm-6">
+        <h1 class="m-0">{{ label }}</h1>
+
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item home" id=""><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Starter Page</li>
+            </ol>
+        </div><!-- /.col -->
+{% endblock %}
+{% block content %}
+    <form action="" method="post" class="form-horizontal" novalidate>
+        {% csrf_token %}
+        {% for filed in customerform_obj %}
+            <div class="form-group">
+                <label for="{{ filed.id_for_label }}" class="col-sm-2">{{ filed.label }}</label>
+                <div class="col-sm-6">{{ filed }}</div>
+
+                <span class="col-sm-4" style="color: red">{{ filed.errors.0 }}</span>
+            </div>
+        {% endfor %}
+        <button class="btn btn-success">提交</button>
+    </form>
+{% endblock %}
+

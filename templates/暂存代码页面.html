@@ -1,0 +1,28 @@
+{% for list in request.session.permissions %}
+    {% if list.permissions__is_menu %}
+        <li class="nav-item">
+            <a href="{{ list.permissions__url }}" class="nav-link customer">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{ list.permissions__title }}</p>
+            </a>
+        </li>
+    {% endif %}
+{% endfor %}
+
+
+
+ <li class="nav-item menu-open">
+                        <a href="#" class="nav-link active">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                显示菜单
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                        <!-- 使用inclusion——tag实现页面动态选中-->
+                            {% load automenu %}
+                            {% menulist request %}
+                            <!--动态生成菜单-->
+                        </ul>
+ </li>

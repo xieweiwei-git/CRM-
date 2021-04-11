@@ -1,0 +1,91 @@
+{% extends 'starter.html' %}
+{% load mytags %}
+{% load static %}
+
+{% block title %}
+    <h1>课程记录</h1>
+{% endblock %}
+{% block consult %}
+    <div style="padding-bottom: 4px"><a href="" class=" btn btn-primary">添加纪录</a></div>
+
+    <form class="form-inline" style="float: right !important;">
+        {#    {% csrf_token %}#}
+        <div class="form-group">
+            <select class="form-control" name="search_type">
+                <option value="course_title__contains">课程名称</option>
+                {#                <option value="qq__contains">QQ</option>#}
+            </select>
+            <input type="text" class="form-control" id="search" placeholder="seach..." name="name">
+            <button type="submit" class="btn btn-default">search</button>
+        </div>
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        {{ formsets.management_form }}
+        <div class="form-group" style="float: left !important;">
+            <select name="action" id="action" class="form-control">
+                {#                <option value="bulk_create_record">查看学习记录</option>#}
+                <option value="deleteRecord">批量删除</option>
+            </select>
+
+
+        </div>
+        <button class="btn btn-primary">GO!</button>
+        {{ formsets.errors }}
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+            <tr>
+                <th><input type="checkbox">all</th>
+                <th>序号</th>
+                <th>考勤</th>
+                <th>课程成绩</th>
+                <th>作业批语</th>
+                <th>上课时间</th>
+                <th>备注</th>
+                <th>作业文件</th>
+                <th>某个课程</th>
+                <th>学员</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <!--
+           attendance = models.CharField('考勤',choices=addtendance_choices,default='checked',max_length=64)
+    score = models.IntegerField('课程成绩',choices=score_choices,default=-1)
+    homework_note = models.CharField(max_length=300,verbose_name='作业批语',blank=True,null=True)
+    date = models.DateField(auto_now_add=True)
+    note = models.CharField('备注',max_length=300,blank=True,null=True)
+    homework = models.FileField(verbose_name='作业文件',blank=True,null=True,default=None)
+    course_record = models.ForeignKey('CourseRecord',verbose_name='某个课程')
+    student = models.ForeignKey('Custumer',verbose_name='学员')
+            -->
+            {% for formset in formsets %}
+                <tr>
+                    {{ formset.id }}
+                    <td><input type="checkbox" name="cids" value="{{ formset.pk }}"></td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ formset.attendance }}</td>
+                    <td>{{ formset.score }}</td>
+                    <td>{{ formset.homework_note }}</td>
+                    <td>{{ formset.note }}</td>
+                    <td>{{ formset.date | date:'Y:m:d H:i:s' }}</td>
+                    <td>{{ formset.homework }}</td>
+                    <td>{{ formset.instance.course_record }}</td>
+                    <td class="hidden">{{ formset.course_record }}</td>
+                    <!--  class="hidden"-->
+                    <td>{{ formset.instance.student }}</td>
+                    <td class="hidden">{{ formset.student }}</td>
+
+                    {#                    <td><a class="fa fa-edit" href="{% url 'edit_customer' costomers.pk %}">编辑</a></td>#}
+                    <td><a class="fa fa-edit" href="">编辑</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+        <button class="btn btn-success">提交</button>
+    </form>
+    {{ page_html }}
+{% endblock %}

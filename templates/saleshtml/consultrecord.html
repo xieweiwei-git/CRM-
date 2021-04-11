@@ -1,0 +1,71 @@
+{% extends 'starter.html' %}
+{% load mytags %}
+{% load static %}
+
+{% block title %}
+    {% if TAG  == '1' %}
+        <h1>所有跟进记录</h1>
+    {% else %}
+        <h1>我的跟进记录</h1>
+    {% endif %}
+{% endblock %}
+{% block consult %}
+    <div style="padding-bottom: 4px"><a href="{% url 'add_consult' %}" class=" btn btn-primary">添加纪录</a></div>
+    <form class="form-inline" style="float: right !important;">
+        {#    {% csrf_token %}#}
+        <div class="form-group">
+            <select class="form-control" name="search_type">
+                <option value="consultant__username__contains">跟进人</option>
+                {#                <option value="qq__contains">QQ</option>#}
+            </select>
+            <input type="text" class="form-control" id="search" placeholder="seach..." name="name">
+            <button type="submit" class="btn btn-default">search</button>
+        </div>
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group" style="float: left !important;">
+            <select name="action" id="action" class="form-control">
+                {#                {% if TAG  == '1' %}#}
+                <option value="deleteRecord">批量删除</option>
+                {#                {% else %}#}
+                {#                    <option value="reverse_s2g">批量删除</option>#}
+                {#                {% endif %}#}
+
+            </select>
+
+        </div>
+        <button class="btn btn-primary">GO!</button>
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+            <tr>
+                <th><input type="checkbox">all</th>
+                <th>序号</th>
+                <th>咨询的客户</th>
+                <th>跟进详情</th>
+                <th>跟进状态</th>
+                <th>跟进人</th>
+                <th>跟进日期</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for consult_obj in consult_objs %}
+                <tr>
+                    <td><input type="checkbox" name="cids" value="{{ consult_obj.pk }}"></td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ consult_obj.customer }}</td>
+                    <td>{{ consult_obj.note }}</td>
+                    <td>{{ consult_obj.get_status_display }}</td>
+                    {#                 <td>{{ consult_obj.status }}</td>#}
+                    <td>{{ consult_obj.consultant }}</td>
+                    <td>{{ consult_obj.date | date:'Y:m:d H:i:s' }}</td>
+                    {#                    <td><a class="fa fa-edit" href="{% url 'edit_customer' costomers.pk %}">编辑</a></td>#}
+                    <td><a class="fa fa-edit" href="{% resole_url request 'edit_consult' consult_obj.pk %}">编辑</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+    {{ page_html }}
+{% endblock %}

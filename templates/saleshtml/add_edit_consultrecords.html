@@ -1,0 +1,15 @@
+{% extends 'starter.html' %}
+{% block consultrecords %}
+     <form action="" method="post" class="form-horizontal" novalidate>
+        {% csrf_token %}
+        {% for filed in recordsForm %}
+            <div class="form-group">
+                <label for="{{ filed.id_for_label }}" class="col-sm-2">{{ filed.label }}</label>
+                <div class="col-sm-6">{{ filed }}</div>
+
+                <span class="col-sm-4" style="color: red">{{ filed.errors.0 }}</span>
+            </div>
+        {% endfor %}
+        <button class="btn btn-success">提交</button>
+    </form>
+{% endblock %}
